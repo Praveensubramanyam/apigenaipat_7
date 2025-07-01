@@ -10,7 +10,7 @@ import logging
 import hashlib
 import json
 from typing import Optional, Any
-
+from fastapi.middleware.cors import CORSMiddleware
 
 from fastapi import FastAPI, File, UploadFile, HTTPException,Request , Body
 from contextlib import asynccontextmanager
@@ -151,7 +151,13 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 set_app(app)
 set_app_flat(app)
-
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Or specify your Streamlit app origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 @app.post("/upload_file/")
 async def upload_file(file: UploadFile = File(...)):
     try :
