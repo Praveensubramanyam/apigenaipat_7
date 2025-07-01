@@ -3,6 +3,7 @@ from azure.keyvault.secrets import SecretClient
 from azure.ai.vision.imageanalysis import ImageAnalysisClient
 from azure.core.credentials import AzureKeyCredential
 from azure.storage.blob import BlobServiceClient
+from azure.identity.aio import DefaultAzureCredential
 from openai import AzureOpenAI
 import redis.asyncio as redis
 import logging
@@ -130,9 +131,7 @@ async def lifespan(app: FastAPI):
         )
 
         app.state.secret_client =  SecretClient(
-            endpoint        = CONFIG["search_endpoint"],
-            search_index    = CONFIG["search_index"],
-            credential      = AzureKeyCredential(CONFIG["search_key"]),
+            credential=DefaultAzureCredential(),
             vault_url       = kv_uri
         )
         app.state.vision_client = ImageAnalysisClient(
@@ -147,8 +146,8 @@ async def lifespan(app: FastAPI):
         app.state.cache = cache
         yield
     finally: 
-        yield ("App state failed")
-        
+        await cache.disconnect()
+
 app = FastAPI(lifespan=lifespan)
 set_app(app)
 set_app_flat(app)
