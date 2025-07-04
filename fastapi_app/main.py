@@ -282,37 +282,47 @@ async def generate_response(request: Request , body:dict = Body(...)):
     
 
 @app.post("/general_chat/")
-async def generate_general_response(request: Request, body:dict = Body(...)):
-    user_query = body.get("query","")
-    prompt = f"""
-    You are an AI assistant replying to query
+async def generate_general_response(request: Request, body: dict = Body(...)):
+    try:
+        user_query = body.get("query", "")
+        
+        # Debug: Check if CONFIG values exist
+        if not CONFIG.get('openai_endpoint'):
+            raise HTTPException(status_code=500, detail="OpenAI endpoint not configured")
+        if not CONFIG.get('openai_api_key'):
+            raise HTTPException(status_code=500, detail="OpenAI API key not configured")
+        
+        prompt = f"""
+        You are an AI assistant replying to query
 
-    user Query: {user_query}
+        user Query: {user_query}
 
-    Give a relevant answer to the user query and lead them if they wanted any more assistance with.
-"""
-    
-    if not CONFIG.get('openai_endpoint'):
-        raise HTTPException(status_code=500, detail="OpenAI configuration is missing")
-    if not CONFIG.get('openai_api_key'):
-        raise HTTPException(status_code=500, detail="OpenAI API key is missing")
-    
-    client =  AzureOpenAI(
+        Give a relevant answer to the user query and lead them if they wanted any more assistance with.
+        """
+        
+        client = AzureOpenAI(
             azure_endpoint=CONFIG['openai_endpoint'],
             api_key=CONFIG['openai_api_key'],
             api_version="2024-12-01-preview",
         )
 
-    completion = client.chat.completions.create(
-       model="gpt-35-turbo",
-        messages=[
-            {"role": "user", "content": prompt}
+        completion = client.chat.completions.create(
+            model="gpt-35-turbo",
+            messages=[
+                {"role": "user", "content": prompt}
             ]
         )
-    
-    response_data = {
-        "query" :  user_query,
-        "openai_response" : completion.choices[0].message.content
-    }
+        
+        response_data = {
+            "query": user_query,
+            "openai_response": completion.choices[0].message.content
+        }
 
-    return response_data
+        return response_data
+        
+    except Exception as e:
+        # Return detailed error for debugging
+        raise HTTPException(
+            status_code=500, 
+            detail=f"Error in general_chat: {str(e)}"
+        )
