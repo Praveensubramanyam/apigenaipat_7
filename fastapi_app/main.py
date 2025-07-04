@@ -26,10 +26,15 @@ REDIS_CONFIG = {
     "password" : CONFIG["redis_password"],
     "ssl": True,
     "ssl_cert_reqs": None,
+    "ssl_check_hostname": False,
     "decode_responses": True,
-    "socket_timeout": 5,
-    "socket_connect_timeout": 5,
-    "retry_on_timeout": True
+    "socket_timeout": 30,
+    "socket_connect_timeout": 30,
+    "socket_keepalive": True,
+    "socket_keepalive_options": {},
+    "retry_on_timeout": True,
+    "retry_on_error": [redis.exceptions.ConnectionError, redis.exceptions.TimeoutError],
+    "health_check_interval": 10,  # seconds
 }  
 
 CACHE_TTL = {
