@@ -291,6 +291,12 @@ async def generate_general_response(request: Request, body:dict = Body(...)):
 
     Give a relevant answer to the user query and lead them if they wanted any more assistance with.
 """
+    
+    if not CONFIG.get('openai_endpoint'):
+        raise HTTPException(status_code=500, detail="OpenAI configuration is missing")
+    if not CONFIG.get('openai_api_key'):
+        raise HTTPException(status_code=500, detail="OpenAI API key is missing")
+    
     client =  AzureOpenAI(
             azure_endpoint=CONFIG['openai_endpoint'],
             api_key=CONFIG['openai_api_key'],
