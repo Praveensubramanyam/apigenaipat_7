@@ -172,10 +172,10 @@ async def upload_file(file: UploadFile = File(...)):
         content = await file.read()
         file_hash = hashlib.md5(content).hexdigest()
         cache_key = cache._generate_cache_key("Upload",f"{file.filename}_{file_hash}")
-        cached_result = await cache.get(cache_key)
+        #cached_result = await cache.get(cache_key)
         blob_client.upload_blob(content,overwrite= True)
         pors = str(blob_client.blob_name).replace('.','_') 
-        image_process_task = await image_process(blob_client.blob_name)
+        #image_process_task = await image_process(blob_client.blob_name)
 
         result = {"message": f"File '{file.filename}' uploaded successfully!",
                 "blob name": pors,
