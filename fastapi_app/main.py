@@ -274,11 +274,17 @@ async def generate_response(request: Request , body:dict = Body(...)):
         
         return response_data
 
-    except Exception as e:
+    except Exception as openai_error:
+        error_details = {
+        "error": str(openai_error),
+        "endpoint": CONFIG['openai_endpoint'],
+        #"model": CONFIG.get('openai_api_version'),
+        "api_version": "2023-12-01-preview"
+    }
         raise HTTPException(
-            status_code=500,
-              detail=f"OpenAI processing failed: {str(e)}"
-              )
+        status_code=500,
+        detail=f"OpenAI processing failed: {error_details}"
+    )
     
 
 @app.post("/general_chat/")
