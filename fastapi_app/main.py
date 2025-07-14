@@ -250,7 +250,7 @@ async def generate_response(request: Request , body:dict = Body(...)):
         client =  AzureOpenAI(
             azure_endpoint=CONFIG['openai_endpoint'],
             api_key=CONFIG['openai_api_key'],
-            api_version="2023-12-01-preview",
+            api_version="2024-02-01",
         )
 
         completion = client.chat.completions.create(
@@ -279,7 +279,7 @@ async def generate_response(request: Request , body:dict = Body(...)):
         "error": str(openai_error),
         "endpoint": CONFIG['openai_endpoint'],
         #"model": CONFIG.get('openai_api_version'),
-        "api_version": "2023-12-01-preview"
+        "api_version": "2024-02-01"
     }
         raise HTTPException(
         status_code=500,
@@ -309,7 +309,7 @@ async def generate_general_response(request: Request, body: dict = Body(...)):
         client = AzureOpenAI(
             azure_endpoint=CONFIG['openai_endpoint'],
             api_key=CONFIG['openai_api_key'],
-            api_version="2023-12-01-preview",
+            api_version="2024-02-01",
         )
 
         completion = client.chat.completions.create(
