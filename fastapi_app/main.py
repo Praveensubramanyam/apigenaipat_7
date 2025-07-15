@@ -11,6 +11,7 @@ import hashlib
 import json
 from typing import Optional, Any
 from fastapi.middleware.cors import CORSMiddleware
+import traceback
 
 from fastapi import FastAPI, File, UploadFile, HTTPException,Request , Body
 from contextlib import asynccontextmanager
@@ -281,8 +282,11 @@ async def generate_response(request: Request , body:dict = Body(...)):
         "error": str(openai_error),
         "endpoint": CONFIG['openai_endpoint'],
         #"model": CONFIG.get('openai_api_version'),
-        "api_version": "2024-12-01-preview"
+        "api_version": "2024-12-01-preview",
+        "traceback": traceback.format_exc()
+
     }
+        logging.error(f"OpenAI processing failed: {error_details}")
         raise HTTPException(
         status_code=500,
         detail=f"OpenAI processing failed: {error_details}"
