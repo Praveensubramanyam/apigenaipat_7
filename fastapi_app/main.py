@@ -230,7 +230,9 @@ async def generate_response(request: Request , body:dict = Body(...)):
         metadata = results.get("metadata", {})
         caption  = "|".join(metadata.get("captions", []))
         tags     = ", ".join(metadata.get("tags", []))
-        text     = "\n".join(metadata.get("ocr_text", []))
+        ocr_text = "\n".join(metadata.get("ocr_text", []))
+        texts     = "\n".join(text.splitlines()[:50])
+        text     = texts[:4000] 
         
         prompt = f"""
             You are an AI assistant analyzing visual content.
