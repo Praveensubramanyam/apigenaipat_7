@@ -333,7 +333,13 @@ async def generate_general_response(request: Request, body: dict = Body(...)):
         return response_data
         
     except Exception as e:
-        # Return detailed error for debugging
+        error_details = {
+        "error": str(e),
+        "endpoint": CONFIG['openai_endpoint'],
+        #"model": CONFIG.get('openai_api_version'),
+        "api_version": "2024-12-01-preview",
+        "traceback": traceback.format_exc()
+    }
         raise HTTPException(
             status_code=500, 
             detail=f"Error in general_chat: {str(e)}"
