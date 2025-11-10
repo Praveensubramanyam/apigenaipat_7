@@ -22,3 +22,6 @@ CONFIG = {
     "redis_password": client.get_secret("AZURE-REDIS-PASSWORD").value,
     "redis_port": client.get_secret("AZURE-REDIS-PORT").value
 }
+
+def test():
+    return "hello there"
