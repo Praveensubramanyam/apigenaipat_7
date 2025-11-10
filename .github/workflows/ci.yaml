@@ -13,13 +13,14 @@ jobs:
     steps:
     - name : Checkout repository
       uses: actions/checkout@v3
-      
+
     - name: Repository files
       run: ls -la
 
     - name : Test Dockerfile 
       run: |
-        if [ -f Dockerfile]; then
+        set -x 
+        if [ -f Dockerfile ]; then
           echo "Dockerfile found"
         else
           echo "Dockerfile not found"
