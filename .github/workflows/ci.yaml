@@ -1,0 +1,24 @@
+name : CI 
+
+on:
+  push: 
+    branches : [main]
+  pull_request:
+    branches : [main]
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name : Checkout repository
+      uses: actions/checkout@v3
+    
+    - name : Test Dockerfile 
+      run: |
+        if [ -f Dockerfile] ; then
+          echo "Dockerfile found"
+        else
+          echo "Dockerfile not found"
+        fi
+        
