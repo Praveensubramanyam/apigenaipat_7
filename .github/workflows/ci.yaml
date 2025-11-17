@@ -42,4 +42,3 @@ jobs:
       run: |
         echo "🚀 Pushing Docker image to DockerHub..."
         docker push praveensubramanyam/genai_pat7:fastapi
-
